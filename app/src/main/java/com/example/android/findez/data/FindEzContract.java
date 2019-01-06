@@ -29,7 +29,7 @@ public class FindEzContract {
      * looking at item data. content://com.example.android.inventory/staff/ will fail,
      * as the ContentProvider hasn't been given any information on what to do with "staff".
      */
-    public static final String PATH_FIND_EZ = "findEz";
+    public static final String PATH_ITEMS_INFO = "items_info";
 
     private FindEzContract() {
     }
@@ -48,13 +48,13 @@ public class FindEzContract {
          * The MIME type of the {@link #CONTENT_URI} for a list of item.
          */
         public static final String CONTENT_LIST_TYPE =
-                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FIND_EZ;
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_ITEMS_INFO;
 
         /**
          * The MIME type of the {@link #CONTENT_URI} for a single item.
          */
         public static final String CONTENT_ITEM_TYPE =
-                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_FIND_EZ;
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_ITEMS_INFO;
 
         /**
          * Databse column datatypes
@@ -64,7 +64,7 @@ public class FindEzContract {
         /**
          * The content URI to access the item data in the provider
          */
-        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_FIND_EZ);
+        public static final Uri CONTENT_URI = Uri.withAppendedPath(BASE_CONTENT_URI, PATH_ITEMS_INFO);
 
     }
 }

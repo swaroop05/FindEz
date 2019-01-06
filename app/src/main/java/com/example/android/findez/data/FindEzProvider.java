@@ -30,12 +30,12 @@ public class FindEzProvider extends ContentProvider {
     /**
      * URI matcher code for the content URI for the findez table
      */
-    private static final int FIND_EZ = 100;
+    private static final int ITEMS_INFO = 100;
 
     /**
      * URI matcher code for the content URI for a single item in the findez table
      */
-    private static final int FIND_EZ_ID = 101;
+    private static final int ITEMS_INFO_ID = 101;
 
     /**
      * UriMatcher object to match a content URI to a corresponding code.
@@ -49,8 +49,8 @@ public class FindEzProvider extends ContentProvider {
         // The calls to addURI() go here, for all of the content URI patterns that the provider
         // should recognize. All paths added to the UriMatcher have a corresponding code to return
         // when a match is found.
-        sUriMatcher.addURI(FindEzContract.CONTENT_AUTHORITY, FindEzContract.PATH_FIND_EZ, FIND_EZ);
-        sUriMatcher.addURI(FindEzContract.CONTENT_AUTHORITY, FindEzContract.PATH_FIND_EZ + "/#", FIND_EZ_ID);
+        sUriMatcher.addURI(FindEzContract.CONTENT_AUTHORITY, FindEzContract.PATH_ITEMS_INFO, ITEMS_INFO);
+        sUriMatcher.addURI(FindEzContract.CONTENT_AUTHORITY, FindEzContract.PATH_ITEMS_INFO + "/#", ITEMS_INFO_ID);
     }
 
 
@@ -71,9 +71,9 @@ public class FindEzProvider extends ContentProvider {
     public String getType(@NonNull Uri uri) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case FIND_EZ:
+            case ITEMS_INFO:
                 return FindEzContract.FindEzEntry.CONTENT_LIST_TYPE;
-            case FIND_EZ_ID:
+            case ITEMS_INFO_ID:
                 return FindEzContract.FindEzEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalStateException("Unknown URI " + uri + " with match " + match);
@@ -85,7 +85,7 @@ public class FindEzProvider extends ContentProvider {
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
         final int match = sUriMatcher.match(uri);
         switch (match) {
-            case FIND_EZ:
+            case ITEMS_INFO:
                 return insertItem(uri, values);
             default:
                 throw new IllegalArgumentException("Insertion is not supported for URI " + uri);
