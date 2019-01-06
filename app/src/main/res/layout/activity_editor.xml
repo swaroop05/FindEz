@@ -7,7 +7,7 @@
     tools:context="com.example.android.findez.EditorActivity">
 
     <ImageView
-        android:id="@+id/image_view"
+        android:id="@+id/iv_item_image"
         android:layout_width="match_parent"
         android:layout_height="@dimen/image_item_height"
         android:src="@drawable/ic_image_black_24dp" />
@@ -18,17 +18,17 @@
         android:orientation="vertical">
 
         <EditText
-            android:id="@+id/item_name"
+            android:id="@+id/ev_item_name"
             style="@style/EditorFieldStyle"
             android:hint="@string/item_name" />
 
         <EditText
-            android:id="@+id/item_location"
+            android:id="@+id/ev_item_location"
             style="@style/EditorLocationFieldStyle"
             android:hint="@string/item_location" />
 
         <EditText
-            android:id="@+id/item_comments"
+            android:id="@+id/ev_item_comments"
             style="@style/EditorCommentsFieldStyle"
             android:hint="@string/item_comments" />
 
