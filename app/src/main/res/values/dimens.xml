@@ -2,4 +2,8 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="fab_elevation">6dp</dimen>
+
+
+    <!-- Height of each Image item -->
+    <dimen name="image_item_height">280dp</dimen>
 </resources>

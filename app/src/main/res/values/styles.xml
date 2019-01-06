@@ -8,4 +8,23 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Style for an EditText field in the editor -->
+    <style name="EditorFieldStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:fontFamily">sans-serif-light</item>
+        <item name="android:textAppearance">?android:textAppearanceMedium</item>
+        <item name="android:inputType">textCapWords</item>
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingStart">8dp</item>
+    </style>
+
+    <style name="EditorLocationFieldStyle" parent="@style/EditorFieldStyle">
+        <item name="android:inputType">textMultiLine</item>
+    </style>
+
+    <style name="EditorCommentsFieldStyle" parent="@style/EditorFieldStyle">
+        <item name="android:layout_height">102dp</item>
+        <item name="android:inputType">textMultiLine</item>
+    </style>
 </resources>

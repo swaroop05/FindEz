@@ -3,4 +3,7 @@
     <string name="action_add">Add Item</string>
     <!-- Label for editor menu option to save inventory and leave editor [CHAR LIMIT=20] -->
     <string name="action_save">Save</string>
+    <string name="item_name">Enter Item Name</string>
+    <string name="item_location">Enter Item Location</string>
+    <string name="item_comments">Comments</string>
 </resources>
