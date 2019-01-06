@@ -23,6 +23,6 @@
         android:layout_marginRight="@dimen/fab_margin"
         android:contentDescription="@string/action_add"
         android:elevation="@dimen/fab_elevation"
-        android:src="@drawable/ic_add_black_24dp"
+        android:src="@drawable/ic_add_white_24dp"
         app:fabSize="normal" />
 </android.support.design.widget.CoordinatorLayout>
