@@ -6,4 +6,8 @@
     <string name="item_name">Enter Item Name</string>
     <string name="item_location">Enter Item Location</string>
     <string name="item_comments">Comments</string>
+    <!-- Toast message in editor when new Item has been successfully inserted [CHAR LIMIT=NONE] -->
+    <string name="editor_insert_item_successful">Item\'s Information Saved</string>
+    <!-- Toast message in editor when new Item has failed to be inserted [CHAR LIMIT=NONE] -->
+    <string name="editor_insert_item_failed">Error with saving Item\'s Information</string>
 </resources>

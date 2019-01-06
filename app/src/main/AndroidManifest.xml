@@ -22,6 +22,11 @@
             </intent-filter>
         </activity>
         <activity android:name=".EditorActivity"></activity>
+
+        <provider
+            android:authorities="com.example.android.findez"
+            android:name=".data.FindEzProvider"
+            android:exported="false"/>
     </application>
 
 </manifest>

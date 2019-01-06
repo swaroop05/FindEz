@@ -38,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
         displayDatabaseInfo();
     }
 
+    //TODO: Remove this method after ContentProvider is implemented
     /**
      * Temporary helper method to display information in the onscreen TextView about the state of
      * the items database.

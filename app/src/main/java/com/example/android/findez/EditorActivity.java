@@ -3,6 +3,7 @@ package com.example.android.findez;
 import android.*;
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +37,7 @@ public class EditorActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_WRITE_STORAGE = 0;
 
+    Uri mCurrentItemInfoUri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +49,7 @@ public class EditorActivity extends AppCompatActivity {
         mItemImageView = findViewById(R.id.iv_item_image);
         requestPermissions();
     }
+
 
     private void insertItemDetails (){
         // Read from input fields
@@ -68,7 +71,25 @@ public class EditorActivity extends AppCompatActivity {
         values.put(FindEzContract.FindEzEntry.COLUMN_ITEM_LOCATION, locationString);
         values.put(FindEzContract.FindEzEntry.COLUMN_ITEM_COMMENTS, commentsString);
 
-        // Insert a new row for item in the database, returning the ID of that new row.
+        Uri uri = null;
+        int changedRowID = 0;
+        if (mCurrentItemInfoUri != null) {
+            //TODO Update this item once CursorLoaders and CursorAdapters is implemented
+        } else {
+            uri = getContentResolver().insert(FindEzContract.FindEzEntry.CONTENT_URI, values);
+            if (uri == null) {
+                // If the new content URI is null, then there was an error with insertion.
+                Toast.makeText(this, getString(R.string.editor_insert_item_failed),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                // Otherwise, the insertion was successful and we can display a toast.
+                Toast.makeText(this, getString(R.string.editor_insert_item_successful),
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+
+
+        /*// Insert a new row for item in the database, returning the ID of that new row.
         long newRowId = db.insert(FindEzContract.FindEzEntry.TABLE_NAME, null, values);
         // Show a toast message depending on whether or not the insertion was successful
         if (newRowId == -1) {
@@ -77,7 +98,7 @@ public class EditorActivity extends AppCompatActivity {
         } else {
             // Otherwise, the insertion was successful and we can display a toast with the row ID.
             Toast.makeText(this, "Item saved with row id: " + newRowId, Toast.LENGTH_SHORT).show();
-        }
+        }*/
 
     }
 
@@ -100,6 +121,9 @@ public class EditorActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Request Permission if not already provided
+     */
     public void requestPermissions(){
         readPermission = ContextCompat.checkSelfPermission(this,
                 android.Manifest.permission.READ_EXTERNAL_STORAGE);
