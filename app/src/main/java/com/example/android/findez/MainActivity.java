@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
                 FindEzContract.FindEzEntry._ID,
                 FindEzContract.FindEzEntry.COLUMN_ITEM_NAME,
                 FindEzContract.FindEzEntry.COLUMN_ITEM_LOCATION,
-                FindEzContract.FindEzEntry.COLUMN_ITEM_COMMENTS,
+                FindEzContract.FindEzEntry.COLUMN_ITEM_IMAGE,
                  };
 
         // Perform a query on the items table
@@ -67,6 +67,11 @@ public class MainActivity extends AppCompatActivity {
                 null,                  // Don't filter by row groups
                 null);                   // The sort order
         GridView itemsGridView = findViewById(R.id.gv_items);
+
+        // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
+        View emptyView = findViewById(R.id.empty_view);
+        itemsGridView.setEmptyView(emptyView);
+
         ItemsCursorAdapter itemsCursorAdapter = new ItemsCursorAdapter(this, cursor);
         itemsGridView.setAdapter(itemsCursorAdapter);
        /* TextView displayView = (TextView) findViewById(R.id.tv_temp_text);

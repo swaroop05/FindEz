@@ -2,20 +2,33 @@ package com.example.android.findez;
 
 import android.*;
 import android.content.ContentValues;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.android.findez.data.FindEzContract;
 import com.example.android.findez.data.FindEzDbHelper;
+import com.example.android.findez.data.FindEzProvider;
+
+import java.io.ByteArrayOutputStream;
 
 public class EditorActivity extends AppCompatActivity {
 
@@ -31,11 +44,23 @@ public class EditorActivity extends AppCompatActivity {
     /** ImageView field to enter the item's image */
     private ImageView mItemImageView;
 
+    /**
+     * Tag for the log messages
+     */
+    public static final String LOG_TAG = EditorActivity.class.getSimpleName();
+
     int readPermission;
     int writePermission;
     private static final int PERMISSION_REQUEST_READ_STORAGE = 0;
 
     private static final int PERMISSION_REQUEST_WRITE_STORAGE = 0;
+
+    private static int RESULT_LOAD_IMAGE = 1;
+
+    private boolean makeImageMandatory = false;
+
+    String picturePath = null;
+
 
     Uri mCurrentItemInfoUri;
     @Override
@@ -48,6 +73,20 @@ public class EditorActivity extends AppCompatActivity {
         mItemCommentsEditText = findViewById(R.id.ev_item_comments);
         mItemImageView = findViewById(R.id.iv_item_image);
         requestPermissions();
+
+        mItemImageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (makeImageMandatory) {
+                    Intent i = new Intent(
+                            Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    startActivityForResult(i, RESULT_LOAD_IMAGE);
+                } else {
+                    displayToastMessage(getString(R.string.permission_denied_message));
+                }
+            }
+        });
     }
 
 
@@ -57,7 +96,14 @@ public class EditorActivity extends AppCompatActivity {
         String nameString = mItemNameEditText.getText().toString().trim();
         String locationString = mItemLocationEditText.getText().toString().trim();
         String commentsString = mItemCommentsEditText.getText().toString().trim();
-
+        Bitmap bitmap = null;
+        if (!(picturePath == null)) {
+            bitmap = BitmapFactory.decodeFile(picturePath);
+        } else {
+            BitmapDrawable drawable = (BitmapDrawable) mItemImageView.getDrawable();
+            bitmap = drawable.getBitmap();
+        }
+        byte[] imageData = getBitmapAsByteArray(bitmap);
         // Create database helper
         FindEzDbHelper mDbHelper = new FindEzDbHelper(this);
 
@@ -70,6 +116,7 @@ public class EditorActivity extends AppCompatActivity {
         values.put(FindEzContract.FindEzEntry.COLUMN_ITEM_NAME, nameString);
         values.put(FindEzContract.FindEzEntry.COLUMN_ITEM_LOCATION, locationString);
         values.put(FindEzContract.FindEzEntry.COLUMN_ITEM_COMMENTS, commentsString);
+        values.put(FindEzContract.FindEzEntry.COLUMN_ITEM_IMAGE, imageData);
 
         Uri uri = null;
         int changedRowID = 0;
@@ -133,6 +180,8 @@ public class EditorActivity extends AppCompatActivity {
             ActivityCompat.requestPermissions(this,
                     new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE},
                     PERMISSION_REQUEST_READ_STORAGE);
+        } else {
+            makeImageMandatory = true;
         }
 
         if (!(writePermission == PERMISSION_REQUEST_WRITE_STORAGE)) {
@@ -140,5 +189,67 @@ public class EditorActivity extends AppCompatActivity {
                     new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
                     PERMISSION_REQUEST_WRITE_STORAGE);
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_READ_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    makeImageMandatory = true;
+                } else {
+                    makeImageMandatory = false;
+                }
+            }
+            // other 'case' lines to check for other
+            // permissions this app might request.
+        }
+    }
+
+    /**
+     * Method to complete the image pick from gallery
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = {MediaStore.Images.Media.DATA};
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            picturePath = cursor.getString(columnIndex);
+            cursor.close();
+            Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
+            mItemImageView.setImageBitmap(bitmap);
+        }
+    }
+
+
+    /**
+     * Method to show Toast messages
+     *
+     * @param message
+     */
+    public void displayToastMessage(String message) {
+        Toast toast = Toast.makeText(this, message, Toast.LENGTH_LONG);
+        toast.setGravity(Gravity.BOTTOM, 0, 0);
+        toast.show();
+    }
+
+    public static byte[] getBitmapAsByteArray(Bitmap bitmap) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
+        return outputStream.toByteArray();
+
     }
 }

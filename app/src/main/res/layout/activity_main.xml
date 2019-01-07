@@ -18,7 +18,14 @@
         android:stretchMode="columnWidth"
         android:verticalSpacing="0dp"
         tools:context=".MainActivity" />
-
+    <TextView
+        android:id="@+id/empty_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:padding="8dp"
+        android:text="@string/db_is_empty"
+        android:textSize="12sp" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_fab"
