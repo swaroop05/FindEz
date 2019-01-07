@@ -7,6 +7,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.GridView;
 import android.widget.TextView;
 
 import com.example.android.findez.data.FindEzContract;
@@ -65,10 +66,13 @@ public class MainActivity extends AppCompatActivity {
                 null,                  // Don't group the rows
                 null,                  // Don't filter by row groups
                 null);                   // The sort order
-
-        TextView displayView = (TextView) findViewById(R.id.tv_temp_text);
+        GridView itemsGridView = findViewById(R.id.gv_items);
+        ItemsCursorAdapter itemsCursorAdapter = new ItemsCursorAdapter(this, cursor);
+        itemsGridView.setAdapter(itemsCursorAdapter);
+       /* TextView displayView = (TextView) findViewById(R.id.tv_temp_text);
 
         try {
+
             // Create a header in the Text View that looks like this:
             //
             // The Item table contains <number of rows in Cursor> items.
@@ -107,6 +111,6 @@ public class MainActivity extends AppCompatActivity {
             // Always close the cursor when you're done reading from it. This releases all its
             // resources and makes it invalid.
             cursor.close();
-        }
+        }*/
     }
 }

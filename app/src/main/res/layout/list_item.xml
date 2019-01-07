@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <ImageView
+        android:id="@+id/iv_individual_item_image"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:contentDescription="@string/cd_item_poster_iv"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_image_black_24dp"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@drawable/photo_background_protection" />
+
+
+
+    <TextView
+        android:id="@+id/tv_item_name"
+        style="@style/TextAppearance.AppCompat.Body1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="16dp"
+        android:textColor="@color/white"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:layout_gravity="center|bottom"
+        tools:text="Honda Coupon"/>
+</FrameLayout>
