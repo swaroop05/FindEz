@@ -12,16 +12,22 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.LoaderManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.android.findez.data.FindEzContract;
@@ -30,7 +36,7 @@ import com.example.android.findez.data.FindEzProvider;
 
 import java.io.ByteArrayOutputStream;
 
-public class EditorActivity extends AppCompatActivity {
+public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     /** EditText field to enter the item's name */
     private EditText mItemNameEditText;
@@ -61,18 +67,29 @@ public class EditorActivity extends AppCompatActivity {
 
     String picturePath = null;
 
+    private static final int EXISTING_ITEM_INFO_LOADER = 0;
 
     Uri mCurrentItemInfoUri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
+        Intent intent = getIntent();
+        mCurrentItemInfoUri = intent.getData();
         // Find all relevant views that we will need to read user input from
         mItemNameEditText = findViewById(R.id.ev_item_name);
         mItemLocationEditText = findViewById(R.id.ev_item_location);
         mItemCommentsEditText = findViewById(R.id.ev_item_comments);
         mItemImageView = findViewById(R.id.iv_item_image);
         requestPermissions();
+
+        if (mCurrentItemInfoUri != null) {
+            setTitle(R.string.editor_activity_title_edit_item_info);
+            getSupportLoaderManager().initLoader(EXISTING_ITEM_INFO_LOADER, null, this);
+        } else {
+            setTitle(R.string.editor_activity_title_add_item_info);
+
+        }
 
         mItemImageView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -241,5 +258,54 @@ public class EditorActivity extends AppCompatActivity {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream);
         return outputStream.toByteArray();
 
+    }
+
+    @NonNull
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
+        return new CursorLoader(getApplicationContext(), mCurrentItemInfoUri, null, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+// Bail early if the cursor is null or there is less than 1 row in the cursor
+        if (cursor == null || cursor.getCount() < 1) {
+            return;
+        }
+        if (cursor.moveToFirst()) {
+
+
+            String name = cursor.getString(cursor.getColumnIndex(FindEzContract.FindEzEntry.COLUMN_ITEM_NAME));
+            String location = cursor.getString(cursor.getColumnIndex(FindEzContract.FindEzEntry.COLUMN_ITEM_LOCATION));
+            String comments = cursor.getString(cursor.getColumnIndex(FindEzContract.FindEzEntry.COLUMN_ITEM_COMMENTS));
+            mItemNameEditText.setText(name);
+            mItemLocationEditText.setText(location);
+            if (comments != null){
+                mItemCommentsEditText.setText(comments);
+            }
+
+
+
+            byte[] image = null;
+            try {
+                image = cursor.getBlob(cursor.getColumnIndex(FindEzContract.FindEzEntry.COLUMN_ITEM_IMAGE));
+                if (image != null){
+
+                    Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
+                    mItemImageView.setImageBitmap(bmp);
+                }
+
+            } catch (Exception e) {
+                Log.d("cursor problem,", cursor.getBlob(cursor.getColumnIndex(FindEzContract.FindEzEntry.COLUMN_ITEM_IMAGE)).toString());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void onLoaderReset(@NonNull Loader<Cursor> loader) {
+        mItemNameEditText.setText("");
+        mItemLocationEditText.setText("");
+        mItemCommentsEditText.setText("");
     }
 }

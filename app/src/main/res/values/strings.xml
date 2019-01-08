@@ -14,4 +14,6 @@
     <string name="cd_item_poster_iv">item\'s image</string>
     <string name="permission_denied_message">Since you denied permission, Cannot open gallery to load image. Go to App permission to enable and try again</string>
     <string name="db_is_empty">Data base is empty. Click + to add</string>
+    <string name="editor_activity_title_edit_item_info">Edit Item</string>
+    <string name="editor_activity_title_add_item_info">Add Item</string>
 </resources>
