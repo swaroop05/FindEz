@@ -34,16 +34,16 @@ public class ItemsCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        ImageView itemImageView = view.findViewById(R.id.iv_individual_item_image);
+
         TextView itemNameTextView = view.findViewById(R.id.tv_item_name);
         String name = cursor.getString(cursor.getColumnIndex(FindEzContract.FindEzEntry.COLUMN_ITEM_NAME));
         itemNameTextView.setText(name);
-        int i  = cursor.getColumnIndex(FindEzContract.FindEzEntry.COLUMN_ITEM_IMAGE);
 
         byte[] image = null;
         try {
             image = cursor.getBlob(cursor.getColumnIndex(FindEzContract.FindEzEntry.COLUMN_ITEM_IMAGE));
             if (image != null){
+                ImageView itemImageView = view.findViewById(R.id.iv_individual_item_image);
                 Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
                 itemImageView.setImageBitmap(bmp);
             }

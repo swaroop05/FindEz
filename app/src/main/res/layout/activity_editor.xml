@@ -10,7 +10,7 @@
         android:id="@+id/iv_item_image"
         android:layout_width="match_parent"
         android:layout_height="@dimen/image_item_height"
-        android:src="@drawable/ic_image_black_24dp" />
+        android:src="@drawable/ic_add_image" />
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -10,7 +10,7 @@
         android:layout_height="300dp"
         android:contentDescription="@string/cd_item_poster_iv"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_image_black_24dp"/>
+        />
 
     <View
         android:layout_width="match_parent"

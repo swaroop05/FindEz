@@ -101,11 +101,11 @@ public class EditorActivity extends AppCompatActivity {
         if (!(picturePath == null)) {
             bitmap = BitmapFactory.decodeFile(picturePath);
             imageData = getBitmapAsByteArray(bitmap);
-        } /*else {
+        } else {
             BitmapDrawable drawable = (BitmapDrawable) mItemImageView.getDrawable();
             bitmap = drawable.getBitmap();
             imageData = getBitmapAsByteArray(bitmap);
-        }*/
+        }
 
 
 
