@@ -43,12 +43,16 @@ public class ItemsCursorAdapter extends CursorAdapter {
         byte[] image = null;
         try {
             image = cursor.getBlob(cursor.getColumnIndex(FindEzContract.FindEzEntry.COLUMN_ITEM_IMAGE));
+            if (image != null){
+                Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
+                itemImageView.setImageBitmap(bmp);
+            }
+
         } catch (Exception e) {
             Log.d("cursor problem,", cursor.getBlob(cursor.getColumnIndex(FindEzContract.FindEzEntry.COLUMN_ITEM_IMAGE)).toString());
             e.printStackTrace();
         }
-        Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
-        itemImageView.setImageBitmap(bmp);
+
     }
 
     /**

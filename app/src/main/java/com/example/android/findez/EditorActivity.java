@@ -97,18 +97,17 @@ public class EditorActivity extends AppCompatActivity {
         String locationString = mItemLocationEditText.getText().toString().trim();
         String commentsString = mItemCommentsEditText.getText().toString().trim();
         Bitmap bitmap = null;
+        byte[] imageData = null;
         if (!(picturePath == null)) {
             bitmap = BitmapFactory.decodeFile(picturePath);
-        } else {
+            imageData = getBitmapAsByteArray(bitmap);
+        } /*else {
             BitmapDrawable drawable = (BitmapDrawable) mItemImageView.getDrawable();
             bitmap = drawable.getBitmap();
-        }
-        byte[] imageData = getBitmapAsByteArray(bitmap);
-        // Create database helper
-        FindEzDbHelper mDbHelper = new FindEzDbHelper(this);
+            imageData = getBitmapAsByteArray(bitmap);
+        }*/
 
-        // Gets the database in write mode
-        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+
 
         // Create a ContentValues object where column names are the keys,
         // and item attributes from the editor are the values.
@@ -116,7 +115,11 @@ public class EditorActivity extends AppCompatActivity {
         values.put(FindEzContract.FindEzEntry.COLUMN_ITEM_NAME, nameString);
         values.put(FindEzContract.FindEzEntry.COLUMN_ITEM_LOCATION, locationString);
         values.put(FindEzContract.FindEzEntry.COLUMN_ITEM_COMMENTS, commentsString);
-        values.put(FindEzContract.FindEzEntry.COLUMN_ITEM_IMAGE, imageData);
+        if (imageData != null) {
+            values.put(FindEzContract.FindEzEntry.COLUMN_ITEM_IMAGE, imageData);
+        }
+
+
 
         Uri uri = null;
         int changedRowID = 0;
@@ -134,19 +137,6 @@ public class EditorActivity extends AppCompatActivity {
                         Toast.LENGTH_SHORT).show();
             }
         }
-
-
-        /*// Insert a new row for item in the database, returning the ID of that new row.
-        long newRowId = db.insert(FindEzContract.FindEzEntry.TABLE_NAME, null, values);
-        // Show a toast message depending on whether or not the insertion was successful
-        if (newRowId == -1) {
-            // If the row ID is -1, then there was an error with insertion.
-            Toast.makeText(this, "Error with saving item", Toast.LENGTH_SHORT).show();
-        } else {
-            // Otherwise, the insertion was successful and we can display a toast with the row ID.
-            Toast.makeText(this, "Item saved with row id: " + newRowId, Toast.LENGTH_SHORT).show();
-        }*/
-
     }
 
     @Override
