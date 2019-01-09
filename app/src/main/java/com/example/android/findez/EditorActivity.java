@@ -1,7 +1,9 @@
 package com.example.android.findez;
 
 import android.*;
+import android.app.AlertDialog;
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -24,6 +26,7 @@ import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -69,6 +72,25 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     private static final int EXISTING_ITEM_INFO_LOADER = 0;
 
+    private static final String KEY_ITEM_NAME = "item_name";
+
+    private static final String KEY_ITEM_LOCATION = "item_location";
+    private static final String KEY_ITEM_COMMENTS = "item_name";
+    private static final String KEY_ITEM_IMAGE_PATH = "item_image_path";
+    private Bundle mSavedInstanceState;
+    private boolean addingItem = false;
+    private boolean mItemDetailsHasChanged = false;
+    // OnTouchListener that listens for any user touches on a View, implying that they are modifying
+    // the view, and we change the mInventoryHasChanged boolean to true.
+
+    private View.OnTouchListener mTouchListener = new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View view, MotionEvent motionEvent) {
+            mItemDetailsHasChanged = true;
+            return false;
+        }
+    };
+
     Uri mCurrentItemInfoUri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,10 +105,17 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mItemImageView = findViewById(R.id.iv_item_image);
         requestPermissions();
 
+        //Touch Listeners
+        mItemNameEditText.setOnTouchListener(mTouchListener);
+        mItemLocationEditText.setOnTouchListener(mTouchListener);
+        mItemCommentsEditText.setOnTouchListener(mTouchListener);
+        mItemImageView.setOnTouchListener(mTouchListener);
+
         if (mCurrentItemInfoUri != null) {
             setTitle(R.string.editor_activity_title_edit_item_info);
             getSupportLoaderManager().initLoader(EXISTING_ITEM_INFO_LOADER, null, this);
         } else {
+            addingItem = true;
             setTitle(R.string.editor_activity_title_add_item_info);
 
         }
@@ -141,7 +170,14 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         Uri uri = null;
         int changedRowID = 0;
         if (mCurrentItemInfoUri != null) {
-            //TODO Update this item once CursorLoaders and CursorAdapters is implemented
+            changedRowID = getContentResolver().update(mCurrentItemInfoUri, values, null, null);
+            if (changedRowID != 0) {
+                Toast.makeText(this, getString(R.string.editor_insert_item_successful),
+                        Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, getString(R.string.editor_insert_item_failed),
+                        Toast.LENGTH_SHORT).show();
+            }
         } else {
             uri = getContentResolver().insert(FindEzContract.FindEzEntry.CONTENT_URI, values);
             if (uri == null) {
@@ -168,11 +204,55 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_save:
-                insertItemDetails();
-                finish();
+                if (validations()) {
+                    insertItemDetails();
+                    finish();
+                }
+
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    /**
+     * Method to validate the inputs
+     *
+     * @return
+     */
+    public boolean validations() {
+        boolean result = false;
+        String nameString = mItemNameEditText.getText().toString().trim();
+        String locationString = mItemLocationEditText.getText().toString().trim();
+
+        if (nameString.isEmpty() || nameString == null || locationString.isEmpty() || locationString == null || isImageNotPresent()) {
+            displayToastMessage(getString(R.string.fields_mandatory_msg));
+            return result;
+        }else {
+            result = true;
+            return result;
+        }
+    }
+
+    /**
+     * Method to validate if image is present or not
+     *
+     * @return
+     */
+    public boolean isImageNotPresent() {
+        if (addingItem) {
+            if (picturePath == null) {
+                if (makeImageMandatory) {
+                    return true;
+                    //true creates toast
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -260,7 +340,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     }
 
-    @NonNull
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
         return new CursorLoader(getApplicationContext(), mCurrentItemInfoUri, null, null, null, null);
@@ -269,7 +349,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
 // Bail early if the cursor is null or there is less than 1 row in the cursor
-        if (cursor == null || cursor.getCount() < 1) {
+        if (cursor == null || cursor.getCount() < 1 || mSavedInstanceState != null) {
             return;
         }
         if (cursor.moveToFirst()) {
@@ -292,7 +372,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                 if (image != null){
 
                     Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
-                    mItemImageView.setImageBitmap(bmp);
+                    if (picturePath == null) {
+                        mItemImageView.setImageBitmap(bmp);
+                    }
+
                 }
 
             } catch (Exception e) {
@@ -307,5 +390,94 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mItemNameEditText.setText("");
         mItemLocationEditText.setText("");
         mItemCommentsEditText.setText("");
+    }
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        String nameString = mItemNameEditText.getText().toString().trim();
+        String locationString = mItemLocationEditText.getText().toString().trim();
+        String commentsString = mItemCommentsEditText.getText().toString().trim();
+
+
+        if (!nameString.isEmpty()) {
+            outState.putString(KEY_ITEM_NAME, nameString);
+        }
+
+        if (!locationString.isEmpty()) {
+            outState.putString(KEY_ITEM_LOCATION, locationString);
+        }
+        outState.putString(KEY_ITEM_LOCATION, locationString);
+        if (!commentsString.isEmpty()) {
+            outState.putString(KEY_ITEM_COMMENTS, commentsString);
+        }
+
+        if (picturePath != null) {
+            outState.putString(KEY_ITEM_IMAGE_PATH, picturePath);
+        }
+        mSavedInstanceState = outState;
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if (savedInstanceState.getString(KEY_ITEM_NAME) != null){
+            mItemNameEditText.setText(savedInstanceState.getString(KEY_ITEM_NAME));
+        }
+        if (savedInstanceState.getString(KEY_ITEM_LOCATION) != null){
+            mItemLocationEditText.setText(savedInstanceState.getString(KEY_ITEM_LOCATION));
+        }
+        if (savedInstanceState.getString(KEY_ITEM_COMMENTS) != null){
+            mItemCommentsEditText.setText(savedInstanceState.getString(KEY_ITEM_COMMENTS));
+        }
+        if (savedInstanceState.getString(KEY_ITEM_IMAGE_PATH) != null){
+            picturePath = savedInstanceState.getString(KEY_ITEM_IMAGE_PATH);
+        }
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        // If the Item hasn't changed, continue with handling back button press
+        if (!mItemDetailsHasChanged) {
+            super.onBackPressed();
+            return;
+        }
+        // Otherwise if there are unsaved changes, setup a dialog to warn the user.
+        // Create a click listener to handle the user confirming that changes should be discarded.
+        DialogInterface.OnClickListener discardButtonClickListener =
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // User clicked "Discard" button, close the current activity.
+                        finish();
+                    }
+                };
+
+        // Show dialog that there are unsaved changes
+        showUnsavedChangesDialog(discardButtonClickListener);
+    }
+
+    private void showUnsavedChangesDialog(
+            DialogInterface.OnClickListener discardButtonClickListener) {
+        // Create an AlertDialog.Builder and set the message, and click listeners
+        // for the positive and negative buttons on the dialog.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.unsaved_changes_dialog_msg);
+        builder.setPositiveButton(R.string.discard, discardButtonClickListener);
+        builder.setNegativeButton(R.string.keep_editing, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Keep editing" button, so dismiss the dialog
+                // and continue editing the item.
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 }
