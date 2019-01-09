@@ -5,33 +5,44 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.android.findez.EditorActivity">
-
-    <ImageView
-        android:id="@+id/iv_item_image"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/image_item_height"
-        android:src="@drawable/ic_add_image" />
+        android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/ev_item_name"
-            style="@style/EditorFieldStyle"
-            android:hint="@string/item_name" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/ev_item_location"
-            style="@style/EditorLocationFieldStyle"
-            android:hint="@string/item_location" />
 
-        <EditText
-            android:id="@+id/ev_item_comments"
-            style="@style/EditorCommentsFieldStyle"
-            android:hint="@string/item_comments" />
+            <ImageView
+                android:id="@+id/iv_item_image"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/image_item_height"
+                android:src="@drawable/ic_add_image" />
 
-    </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
+                <EditText
+                    android:id="@+id/ev_item_name"
+                    style="@style/EditorFieldStyle"
+                    android:hint="@string/item_name" />
+
+                <EditText
+                    android:id="@+id/ev_item_location"
+                    style="@style/EditorLocationFieldStyle"
+                    android:hint="@string/item_location" />
+
+                <EditText
+                    android:id="@+id/ev_item_comments"
+                    style="@style/EditorCommentsFieldStyle"
+                    android:hint="@string/item_comments" />
+
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

@@ -75,7 +75,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private static final String KEY_ITEM_NAME = "item_name";
 
     private static final String KEY_ITEM_LOCATION = "item_location";
-    private static final String KEY_ITEM_COMMENTS = "item_name";
+    private static final String KEY_ITEM_COMMENTS = "item_comments";
     private static final String KEY_ITEM_IMAGE_PATH = "item_image_path";
     private Bundle mSavedInstanceState;
     private boolean addingItem = false;
@@ -104,6 +104,21 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         mItemCommentsEditText = findViewById(R.id.ev_item_comments);
         mItemImageView = findViewById(R.id.iv_item_image);
         requestPermissions();
+
+        if (savedInstanceState != null) {
+            if (savedInstanceState.getString(KEY_ITEM_NAME) != null){
+                mItemNameEditText.setText(savedInstanceState.getString(KEY_ITEM_NAME));
+            }
+            if (savedInstanceState.getString(KEY_ITEM_LOCATION) != null){
+                mItemLocationEditText.setText(savedInstanceState.getString(KEY_ITEM_LOCATION));
+            }
+            if (savedInstanceState.getString(KEY_ITEM_COMMENTS) != null){
+                mItemCommentsEditText.setText(savedInstanceState.getString(KEY_ITEM_COMMENTS));
+            }
+            if (savedInstanceState.getString(KEY_ITEM_IMAGE_PATH) != null){
+                picturePath = savedInstanceState.getString(KEY_ITEM_IMAGE_PATH);
+            }
+        }
 
         //Touch Listeners
         mItemNameEditText.setOnTouchListener(mTouchListener);
@@ -408,7 +423,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         if (!locationString.isEmpty()) {
             outState.putString(KEY_ITEM_LOCATION, locationString);
         }
-        outState.putString(KEY_ITEM_LOCATION, locationString);
+
         if (!commentsString.isEmpty()) {
             outState.putString(KEY_ITEM_COMMENTS, commentsString);
         }
