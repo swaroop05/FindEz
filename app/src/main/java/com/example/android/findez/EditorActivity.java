@@ -223,7 +223,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                     insertItemDetails();
                     finish();
                 }
-
+                return true;
+            case R.id.action_delete:
+                deleteitem();
                 return true;
         }
         return super.onOptionsItemSelected(item);
@@ -485,6 +487,57 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked the "Keep editing" button, so dismiss the dialog
                 // and continue editing the item.
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+
+        // Create and show the AlertDialog
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
+    }
+
+    /**
+     * Perform the deletion of the Item in the database.
+     */
+    private void deleteitem() {
+        if (mCurrentItemInfoUri != null) {
+            DialogInterface.OnClickListener yesButtonClickListener =
+                    new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            int delID = getContentResolver().delete(mCurrentItemInfoUri, null, null);
+                            if (delID != 0) {
+                                displayToastMessage(getString(R.string.editor_delete_item_successful));
+                            } else {
+                                displayToastMessage(getString(R.string.editor_delete_item_failed));
+                            }
+                            // User clicked "Yes" button, Delete and close the current activity.
+                            finish();
+                        }
+                    };
+            // Show dialog that there are unsaved changes
+            showConfirmationDeleteDialog(yesButtonClickListener);
+        }
+    }
+
+    /**
+     * Method for Showing confirmation on Deleting an Item
+     *
+     * @param yesButtonClickListener
+     */
+    private void showConfirmationDeleteDialog(
+            DialogInterface.OnClickListener yesButtonClickListener) {
+        // Create an AlertDialog.Builder and set the message, and click listeners
+        // for the positive and negative buttons on the dialog.
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.are_you_sure);
+        builder.setPositiveButton(R.string.yes, yesButtonClickListener);
+        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                // User clicked the "Keep editing" button, so dismiss the dialog
+                // and continue editing the Inventory.
                 if (dialog != null) {
                     dialog.dismiss();
                 }

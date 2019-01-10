@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">Find Ez</string>
     <string name="action_add">Add Item</string>
-    <!-- Label for editor menu option to save inventory and leave editor [CHAR LIMIT=20] -->
+    <!-- Label for editor menu option to save Item and leave editor [CHAR LIMIT=20] -->
     <string name="action_save">Save</string>
+    <!-- Label for editor menu option to Delete Item and leave editor [CHAR LIMIT=20] -->
+    <string name="action_delete">Delete</string>
     <string name="item_name">Enter Item Name</string>
     <string name="item_location">Enter Item Location</string>
     <string name="item_comments">Comments</string>
@@ -24,4 +26,12 @@
     <!-- Dialog button text for the option to keep editing the current inventory [CHAR LIMIT=20] -->
     <string name="keep_editing">Keep Editing</string>
     <string name="fields_mandatory_msg">Except Comments, rest fields are mandatory. Including image</string>
+
+    <!-- Toast message in editor when current item was successfully deleted [CHAR LIMIT=NONE] -->
+    <string name="editor_delete_item_successful">Item deleted</string>
+    <!-- Toast message in editor when current item has failed to be deleted [CHAR LIMIT=NONE] -->
+    <string name="editor_delete_item_failed">Error with deleting Item</string>
+    <string name="are_you_sure">Are you sure</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>
