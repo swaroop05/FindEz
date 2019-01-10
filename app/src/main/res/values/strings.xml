@@ -34,4 +34,6 @@
     <string name="are_you_sure">Are you sure</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="search_title">Search</string>
+    <string name="search_hint">Search Items</string>
 </resources>
