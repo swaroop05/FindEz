@@ -28,8 +28,8 @@ import com.example.android.findez.data.FindEzDbHelper;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
-    private FindEzDbHelper mDbHelper;
     ItemsCursorAdapter itemsCursorAdapter;
+    String mSearchString = null;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,13 +43,12 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 startActivity(intent);
             }
         });
-        //mDbHelper = new FindEzDbHelper(this);
+
         GridView itemsGridView = findViewById(R.id.gv_items);
 
         // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
         View emptyView = findViewById(R.id.empty_view);
         itemsGridView.setEmptyView(emptyView);
-        handleIntent(getIntent());
         itemsCursorAdapter = new ItemsCursorAdapter(this, null);
         itemsGridView.setAdapter(itemsCursorAdapter);
         itemsGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -65,45 +64,23 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         getSupportLoaderManager().initLoader(0, null, this);
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-       // displayDatabaseInfo();
-    }
-
-   /* //TODO: Remove this method after ContentProvider is implemented
-    *//**
-     * Temporary helper method to display information in the onscreen TextView about the state of
-     * the items database.
-     *//*
-    private void displayDatabaseInfo() {
-        // Create and/or open a database to read from it
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-
-        // Define a projection that specifies which columns from the database
-        // you will actually use after this query.
-        String[] projection = {
-                FindEzContract.FindEzEntry._ID,
-                FindEzContract.FindEzEntry.COLUMN_ITEM_NAME,
-                FindEzContract.FindEzEntry.COLUMN_ITEM_LOCATION,
-                FindEzContract.FindEzEntry.COLUMN_ITEM_IMAGE,
-                 };
-        Uri baseUri;
-        baseUri = FindEzContract.FindEzEntry.CONTENT_URI;
-        Cursor cursor = getContentResolver().query(baseUri,projection,null,null,null);
-
-
-    }*/
-
     @NonNull
     @Override
     public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
         Uri baseUri;
         baseUri = FindEzContract.FindEzEntry.CONTENT_URI;
+        String selection = null;
+        String[] selectionArgs = null;
+        String searchString;
         String[] projection = {FindEzContract.FindEzEntry._ID,
                 FindEzContract.FindEzEntry.COLUMN_ITEM_NAME,
                 FindEzContract.FindEzEntry.COLUMN_ITEM_IMAGE};
-        return new CursorLoader(getApplicationContext(), baseUri, projection, null, null, null);
+        if (mSearchString != null ) {
+            searchString = "%" + mSearchString + "%";
+            selection = FindEzContract.FindEzEntry.COLUMN_ITEM_NAME + " LIKE ?";
+            selectionArgs = new String[]{searchString};
+        }
+        return new CursorLoader(getApplicationContext(), baseUri, projection, selection, selectionArgs, null);
     }
 
     @Override
@@ -128,15 +105,37 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                mSearchString = query;
+                getSupportLoaderManager().restartLoader(0, null, MainActivity.this);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                if (newText.isEmpty()) {
+                    mSearchString = null;
+                }else {
+                    mSearchString = newText;
+                }
+                getSupportLoaderManager().restartLoader(0, null, MainActivity.this);
+                return true;
+            }
+        });
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                mSearchString = null;
+                getSupportLoaderManager().restartLoader(0, null, MainActivity.this);
+                return false;
+            }
+        });
 
         return true;
-    }
-
-    private void handleIntent(Intent intent) {
-
-        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-            String query = intent.getStringExtra(SearchManager.QUERY);
-            
-        }
     }
 }
