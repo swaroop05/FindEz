@@ -18,17 +18,30 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.SEARCH" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <meta-data android:name="android.app.searchable"
+
+            <meta-data
+                android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-        <activity android:name=".EditorActivity"></activity>
+        <activity android:name=".EditorActivity" />
 
         <provider
-            android:authorities="com.example.android.findez"
             android:name=".data.FindEzProvider"
-            android:exported="false"/>
+            android:authorities="com.example.android.findez"
+            android:exported="false" />
+
+        <receiver android:name=".FindEzWidgetProvider">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/find_ez_widget_provider_info" />
+        </receiver>
     </application>
 
 </manifest>

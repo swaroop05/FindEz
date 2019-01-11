@@ -18,6 +18,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.SearchView;
@@ -30,6 +32,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 
     ItemsCursorAdapter itemsCursorAdapter;
     String mSearchString = null;
+    String widgetSearch = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,7 +64,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 startActivity(intent);
             }
         });
-
+        handleIntent(getIntent());
         getSupportLoaderManager().initLoader(0, null, this);
     }
 
@@ -87,6 +91,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         data.moveToFirst();
         itemsCursorAdapter.swapCursor(data);
+
     }
 
     @Override
@@ -106,8 +111,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-
-
             @Override
             public boolean onQueryTextSubmit(String query) {
                 mSearchString = query;
@@ -136,6 +139,19 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
 
+        if (widgetSearch != null){
+            searchView.setFocusable(true);
+            searchView.setIconified(false);
+            searchView.requestFocusFromTouch();
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
         return true;
+    }
+
+    private void handleIntent(Intent intent) {
+
+        if (intent.getStringExtra(FindEzWidgetProvider.WIDGET_SEARCH) != null) {
+            widgetSearch = intent.getStringExtra(FindEzWidgetProvider.WIDGET_SEARCH);
+        }
     }
 }
