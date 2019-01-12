@@ -39,19 +39,26 @@ import com.example.android.findez.data.FindEzProvider;
 
 import java.io.ByteArrayOutputStream;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class EditorActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     /** EditText field to enter the item's name */
-    private EditText mItemNameEditText;
+    @BindView(R.id.ev_item_name)
+    EditText mItemNameEditText;
 
     /** EditText field to enter the item's location */
-    private EditText mItemLocationEditText;
+    @BindView(R.id.ev_item_location)
+    EditText mItemLocationEditText;
 
     /** EditText field to enter the item's comments */
-    private EditText mItemCommentsEditText;
+    @BindView(R.id.ev_item_comments)
+    EditText mItemCommentsEditText;
 
     /** ImageView field to enter the item's image */
-    private ImageView mItemImageView;
+    @BindView(R.id.iv_item_image)
+    ImageView mItemImageView;
 
     /**
      * Tag for the log messages
@@ -96,13 +103,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
+        ButterKnife.bind(this);
         Intent intent = getIntent();
         mCurrentItemInfoUri = intent.getData();
-        // Find all relevant views that we will need to read user input from
-        mItemNameEditText = findViewById(R.id.ev_item_name);
-        mItemLocationEditText = findViewById(R.id.ev_item_location);
-        mItemCommentsEditText = findViewById(R.id.ev_item_comments);
-        mItemImageView = findViewById(R.id.iv_item_image);
         requestPermissions();
 
         if (savedInstanceState != null) {

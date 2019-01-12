@@ -14,6 +14,9 @@ import android.widget.TextView;
 
 import com.example.android.findez.data.FindEzContract;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by meets on 1/6/2019.
  */
@@ -21,6 +24,7 @@ import com.example.android.findez.data.FindEzContract;
 public class ItemsCursorAdapter extends CursorAdapter {
 
     Context mcontext;
+    ViewHolder holder;
 
     public ItemsCursorAdapter(Context context, Cursor c) {
         super(context, c);
@@ -29,23 +33,25 @@ public class ItemsCursorAdapter extends CursorAdapter {
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         mcontext = context;
+
         return LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
     }
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 
-        TextView itemNameTextView = view.findViewById(R.id.tv_item_name);
+        holder = new ViewHolder(view);
         String name = cursor.getString(cursor.getColumnIndex(FindEzContract.FindEzEntry.COLUMN_ITEM_NAME));
-        itemNameTextView.setText(name);
+
+        holder.itemNameTextView.setText(name);
 
         byte[] image = null;
         try {
             image = cursor.getBlob(cursor.getColumnIndex(FindEzContract.FindEzEntry.COLUMN_ITEM_IMAGE));
             if (image != null){
-                ImageView itemImageView = view.findViewById(R.id.iv_individual_item_image);
+
                 Bitmap bmp = BitmapFactory.decodeByteArray(image, 0, image.length);
-                itemImageView.setImageBitmap(bmp);
+                holder.itemImageView.setImageBitmap(bmp);
             }
 
         } catch (Exception e) {
@@ -58,9 +64,17 @@ public class ItemsCursorAdapter extends CursorAdapter {
     /**
      * Class with ViewHolder Objects
      */
-    private final class ViewHolder {
-        public ImageView itemImageView;
-        public TextView itemName;
+    static  class ViewHolder {
+        @BindView(R.id.tv_item_name)
+        TextView itemNameTextView;
+
+        @BindView(R.id.iv_individual_item_image)
+        ImageView itemImageView;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+
 
     }
 }

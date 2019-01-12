@@ -5,8 +5,8 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -14,19 +14,18 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.SearchView;
-import android.widget.TextView;
 
 import com.example.android.findez.data.FindEzContract;
-import com.example.android.findez.data.FindEzDbHelper;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -34,12 +33,21 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     String mSearchString = null;
     String widgetSearch = null;
 
+    @BindView(R.id.gv_items)
+    GridView itemsGridView;
+
+    @BindView(R.id.empty_view)
+    View emptyView;
+
+    @BindView(R.id.add_fab)
+    FloatingActionButton fab;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
         // Setup FAB to open EditorActivity
-        FloatingActionButton fab = findViewById(R.id.add_fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -48,10 +56,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
 
-        GridView itemsGridView = findViewById(R.id.gv_items);
-
         // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
-        View emptyView = findViewById(R.id.empty_view);
+
         itemsGridView.setEmptyView(emptyView);
         itemsCursorAdapter = new ItemsCursorAdapter(this, null);
         itemsGridView.setAdapter(itemsCursorAdapter);
