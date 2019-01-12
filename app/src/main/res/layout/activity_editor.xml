@@ -20,7 +20,9 @@
                 android:id="@+id/iv_item_image"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/image_item_height"
-                android:src="@drawable/ic_add_image" />
+                android:src="@drawable/ic_add_image"
+                android:contentDescription="@string/image_view_description"
+                android:nextFocusDown="@id/ev_item_name"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -30,12 +32,14 @@
                 <EditText
                     android:id="@+id/ev_item_name"
                     style="@style/EditorFieldStyle"
-                    android:hint="@string/item_name" />
+                    android:hint="@string/item_name"
+                    android:nextFocusDown="@id/ev_item_location"/>
 
                 <EditText
                     android:id="@+id/ev_item_location"
                     style="@style/EditorLocationFieldStyle"
-                    android:hint="@string/item_location" />
+                    android:hint="@string/item_location"
+                    android:nextFocusDown="@id/ev_item_comments"/>
 
                 <EditText
                     android:id="@+id/ev_item_comments"
