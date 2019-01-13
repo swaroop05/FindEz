@@ -62,6 +62,13 @@
         android:text="@string/db_is_empty"
         android:textSize="12sp" />
 
+    <ProgressBar
+        android:id="@+id/loading_spinner_main"
+        style="@style/Widget.AppCompat.ProgressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_fab"
         android:layout_gravity="bottom|end"

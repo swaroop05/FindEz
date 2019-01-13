@@ -21,6 +21,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 import android.widget.SearchView;
 
 import com.example.android.findez.data.FindEzContract;
@@ -51,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @BindView(R.id.app_bar)
     Toolbar mToolbar;
 
+    @BindView(R.id.loading_spinner_main)
+    ProgressBar mProgressbarView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,6 +94,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             }
         });
         handleIntent(getIntent());
+        mProgressbarView.setVisibility(View.VISIBLE);
         getSupportLoaderManager().initLoader(0, null, this);
     }
 
@@ -116,6 +120,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor data) {
         data.moveToFirst();
+        mProgressbarView.setVisibility(View.GONE);
         itemsCursorAdapter.swapCursor(data);
 
     }
