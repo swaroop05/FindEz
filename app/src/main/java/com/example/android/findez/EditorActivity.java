@@ -29,6 +29,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.android.findez.data.FindEzContract;
@@ -59,6 +60,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     /** ImageView field to enter the item's image */
     @BindView(R.id.iv_item_image)
     ImageView mItemImageView;
+
+    @BindView(R.id.loading_spinner_editor)
+    ProgressBar mProgressbarView;
 
     /**
      * Tag for the log messages
@@ -109,6 +113,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         setContentView(R.layout.activity_editor);
         ButterKnife.bind(this);
+        mProgressbarView.setVisibility(View.GONE);
         MobileAds.initialize(this, ADMOB_APP_ID);
         Intent intent = getIntent();
         mCurrentItemInfoUri = intent.getData();
@@ -372,11 +377,13 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, @Nullable Bundle args) {
+        mProgressbarView.setVisibility(View.VISIBLE);
         return new CursorLoader(getApplicationContext(), mCurrentItemInfoUri, null, null, null, null);
     }
 
     @Override
     public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor cursor) {
+        mProgressbarView.setVisibility(View.GONE);
 // Bail early if the cursor is null or there is less than 1 row in the cursor
         if (cursor == null || cursor.getCount() < 1 || mSavedInstanceState != null) {
             return;
@@ -565,12 +572,15 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
         @Override
         protected Integer doInBackground(ContentValues... contentValues) {
+            mProgressbarView.setVisibility(View.VISIBLE);
             return getContentResolver().update(mCurrentItemInfoUri, contentValues[0], null, null);
+
         }
 
         @Override
         protected void onPostExecute(Integer integer) {
             super.onPostExecute(integer);
+            mProgressbarView.setVisibility(View.GONE);
             if (integer != 0) {
                 displayToastMessage(getString(R.string.editor_insert_item_successful));
 
@@ -579,6 +589,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             }
         }
     }
+
 
 
 }

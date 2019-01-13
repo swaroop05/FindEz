@@ -14,8 +14,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-
-
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
             <ImageView
                 android:id="@+id/iv_item_image"
                 android:layout_width="match_parent"
@@ -23,6 +24,15 @@
                 android:src="@drawable/ic_add_image"
                 android:contentDescription="@string/image_view_description"
                 android:nextFocusDown="@id/ev_item_name"/>
+            <ProgressBar
+                android:id="@+id/loading_spinner_editor"
+                style="@style/Widget.AppCompat.ProgressBar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
+        </FrameLayout>
+
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -47,6 +57,7 @@
                     android:hint="@string/item_comments" />
 
             </LinearLayout>
+
             <com.google.android.gms.ads.AdView
                 xmlns:ads="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/adView"
