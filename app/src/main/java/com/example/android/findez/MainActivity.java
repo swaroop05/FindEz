@@ -23,6 +23,10 @@ import android.widget.GridView;
 import android.widget.SearchView;
 
 import com.example.android.findez.data.FindEzContract;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import butterknife.BindView;
@@ -43,13 +47,27 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @BindView(R.id.add_fab)
     FloatingActionButton fab;
 
+    private static final String ADMOB_APP_ID = "ca-app-pub-2704977411494506~2297390896";
+    private static final String ADMOB_AD_UNIT_ID = "ca-app-pub-2704977411494506/6508098646";
+    private static final String ADMOB_AD_UNIT_ID_TEST = "ca-app-pub-3940256099942544/6300978111";
+    private AdView mAdView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        MobileAds.initialize(this, ADMOB_APP_ID);
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        AdView adView = new AdView(this);
+        adView.setAdSize(AdSize.BANNER);
+        adView.setAdUnitId(ADMOB_AD_UNIT_ID_TEST);
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
+
         // Setup FAB to open EditorActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
