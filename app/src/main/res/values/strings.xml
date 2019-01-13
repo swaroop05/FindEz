@@ -43,5 +43,5 @@
     <string name="save_btn_description">Save Item</string>
     <string name="delete_btn_description">Delete Item</string>
     <string name="search_btn_description">Search Item</string>
-
+    <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
 </resources>

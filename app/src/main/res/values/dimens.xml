@@ -6,6 +6,7 @@
 
     <!-- Height of each Image item -->
     <dimen name="image_item_height">280dp</dimen>
+    <dimen name="app_bar_elevation">4dp</dimen>
 
     <!--
 Refer to App Widget Documentation for margin information
