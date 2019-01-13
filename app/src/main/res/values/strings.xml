@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Find Ez</string>
     <string name="action_add">Add Item</string>
+    <string name="floating_action_btn">Floating Action Button</string>
     <!-- Label for editor menu option to save Item and leave editor [CHAR LIMIT=20] -->
     <string name="action_save">Save</string>
     <!-- Label for editor menu option to Delete Item and leave editor [CHAR LIMIT=20] -->

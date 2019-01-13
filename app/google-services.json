@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "754874306227",
+    "firebase_url": "https://findez.firebaseio.com",
+    "project_id": "findez",
+    "storage_bucket": "findez.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:754874306227:android:cf4c590fbbe524a0",
+        "android_client_info": {
+          "package_name": "com.example.android.findez"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "754874306227-a870igqm3iqgdafs1s2g38rp5uh5q9gv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.android.findez",
+            "certificate_hash": "5d892f545d2401a035fcb2d6ec7475b55f370733"
+          }
+        },
+        {
+          "client_id": "754874306227-ahs0g935dhbu4e46e6ig1e738bi2bm4k.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7YQdj0I7Nag76dEkA0qmV3RN08uNdCOU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "754874306227-ahs0g935dhbu4e46e6ig1e738bi2bm4k.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

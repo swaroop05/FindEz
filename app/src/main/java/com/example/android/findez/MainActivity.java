@@ -23,12 +23,13 @@ import android.widget.GridView;
 import android.widget.SearchView;
 
 import com.example.android.findez.data.FindEzContract;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
-
+    private FirebaseAnalytics mFirebaseAnalytics;
     ItemsCursorAdapter itemsCursorAdapter;
     String mSearchString = null;
     String widgetSearch = null;
@@ -45,14 +46,18 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Obtain the FirebaseAnalytics instance.
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         // Setup FAB to open EditorActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                loggingFireBaseAnalytics(R.id.add_fab, getString(R.string.action_add),getString(R.string.floating_action_btn));
                 Intent intent = new Intent(MainActivity.this, EditorActivity.class);
                 startActivity(intent);
+
             }
         });
 
@@ -159,5 +164,15 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         if (intent.getStringExtra(FindEzWidgetProvider.WIDGET_SEARCH) != null) {
             widgetSearch = intent.getStringExtra(FindEzWidgetProvider.WIDGET_SEARCH);
         }
+    }
+
+    public void loggingFireBaseAnalytics (int id, String name, String type){
+        mFirebaseAnalytics.setAnalyticsCollectionEnabled(true);
+        Bundle bundle = new Bundle();
+        bundle.putInt(FirebaseAnalytics.Param.ITEM_ID, id);
+        bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, type);
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
     }
 }
