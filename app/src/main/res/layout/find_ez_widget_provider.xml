@@ -5,16 +5,28 @@
     android:background="#09C"
     android:padding="@dimen/widget_margin">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/app_name"
+        android:textSize="24sp"
+        android:background="@color/colorPrimary"
+        android:textAlignment="center"
+        android:textColor="@color/white" />
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/widget_btn_add_item"
-        android:text="@string/action_add" />
+        android:text="@string/action_add"
+        android:layout_weight="1"
+        />
 
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/widget_btn_search_item"
-        android:text="@string/search_hint"/>
+        android:text="@string/search_hint"
+        android:layout_weight="1"
+        />
 
 </LinearLayout>
