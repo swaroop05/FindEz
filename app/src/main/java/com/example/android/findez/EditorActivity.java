@@ -201,20 +201,11 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
 
 
-        Uri uri = null;
+        mProgressbarView.setVisibility(View.VISIBLE);
         if (mCurrentItemInfoUri != null) {
-            new InsertItemToDbTask().execute(values);
+            new updateDeleteItemToDbTask().execute(values);
         } else {
-            uri = getContentResolver().insert(FindEzContract.FindEzEntry.CONTENT_URI, values);
-            if (uri == null) {
-                // If the new content URI is null, then there was an error with insertion.
-                Toast.makeText(this, getString(R.string.editor_insert_item_failed),
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                // Otherwise, the insertion was successful and we can display a toast.
-                Toast.makeText(this, getString(R.string.editor_insert_item_successful),
-                        Toast.LENGTH_SHORT).show();
-            }
+            new InsertItemToDbTask().execute(values);
         }
     }
 
@@ -238,7 +229,7 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             case R.id.action_save:
                 if (validations()) {
                     insertItemDetails();
-                    finish();
+
                 }
                 return true;
             case R.id.action_delete:
@@ -526,14 +517,9 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
                     new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            int delID = getContentResolver().delete(mCurrentItemInfoUri, null, null);
-                            if (delID != 0) {
-                                displayToastMessage(getString(R.string.editor_delete_item_successful));
-                            } else {
-                                displayToastMessage(getString(R.string.editor_delete_item_failed));
-                            }
-                            // User clicked "Yes" button, Delete and close the current activity.
-                            finish();
+                            mProgressbarView.setVisibility(View.VISIBLE);
+                            ContentValues values = null;
+                            new updateDeleteItemToDbTask().execute(values);
                         }
                     };
             // Show dialog that there are unsaved changes
@@ -568,12 +554,17 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         alertDialog.show();
     }
 
-    public class InsertItemToDbTask extends AsyncTask<ContentValues, Void, Integer>{
+    public class updateDeleteItemToDbTask extends AsyncTask<ContentValues, Void, Integer>{
 
         @Override
         protected Integer doInBackground(ContentValues... contentValues) {
-            mProgressbarView.setVisibility(View.VISIBLE);
-            return getContentResolver().update(mCurrentItemInfoUri, contentValues[0], null, null);
+
+            if (contentValues[0] != null) {
+                return getContentResolver().update(mCurrentItemInfoUri, contentValues[0], null, null);
+            } else {
+                return getContentResolver().delete(mCurrentItemInfoUri, null, null);
+            }
+
 
         }
 
@@ -582,11 +573,34 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
             super.onPostExecute(integer);
             mProgressbarView.setVisibility(View.GONE);
             if (integer != 0) {
-                displayToastMessage(getString(R.string.editor_insert_item_successful));
+                displayToastMessage(getString(R.string.editor_update_delete_successful));
 
             } else {
-                displayToastMessage(getString(R.string.editor_insert_item_failed));
+                displayToastMessage(getString(R.string.editor_update_delete_failed));
             }
+            finish();
+        }
+    }
+
+    public class InsertItemToDbTask extends AsyncTask<ContentValues, Void,Uri>{
+
+        @Override
+        protected Uri doInBackground(ContentValues... contentValues) {
+            return getContentResolver().insert(FindEzContract.FindEzEntry.CONTENT_URI, contentValues[0]);
+        }
+
+        @Override
+        protected void onPostExecute(Uri uri) {
+            super.onPostExecute(uri);
+            mProgressbarView.setVisibility(View.GONE);
+            if (uri == null) {
+                // If the new content URI is null, then there was an error with insertion.
+                displayToastMessage(getString(R.string.editor_update_delete_failed));
+            } else {
+                // Otherwise, the insertion was successful and we can display a toast.
+                displayToastMessage(getString(R.string.editor_update_delete_successful));
+            }
+            finish();
         }
     }
 

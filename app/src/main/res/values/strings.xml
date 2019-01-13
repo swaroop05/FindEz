@@ -10,9 +10,9 @@
     <string name="item_location">Enter Item Location</string>
     <string name="item_comments">Comments</string>
     <!-- Toast message in editor when new Item has been successfully inserted [CHAR LIMIT=NONE] -->
-    <string name="editor_insert_item_successful">Item\'s Information Saved</string>
+    <string name="editor_update_delete_successful">Updates to DB is successful</string>
     <!-- Toast message in editor when new Item has failed to be inserted [CHAR LIMIT=NONE] -->
-    <string name="editor_insert_item_failed">Error with saving Item\'s Information</string>
+    <string name="editor_update_delete_failed">Updates to DB is failed</string>
 
     <string name="cd_item_poster_iv">item\'s image</string>
     <string name="permission_denied_message">Since you denied permission, Cannot open gallery to load image. Go to App permission to enable and try again</string>
