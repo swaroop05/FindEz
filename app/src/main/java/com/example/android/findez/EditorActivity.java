@@ -32,6 +32,10 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.android.findez.data.FindEzContract;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
 
 import java.io.ByteArrayOutputStream;
 
@@ -83,6 +87,10 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     private Bundle mSavedInstanceState;
     private boolean addingItem = false;
     private boolean mItemDetailsHasChanged = false;
+    private static final String ADMOB_APP_ID = "ca-app-pub-2704977411494506~2297390896";
+    private static final String ADMOB_AD_UNIT_ID = "ca-app-pub-2704977411494506/6508098646";
+    private static final String ADMOB_AD_UNIT_ID_TEST = "ca-app-pub-3940256099942544/6300978111";
+    private AdView mAdView;
     // OnTouchListener that listens for any user touches on a View, implying that they are modifying
     // the view, and we change the mInventoryHasChanged boolean to true.
 
@@ -98,12 +106,19 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_editor);
         ButterKnife.bind(this);
+        MobileAds.initialize(this, ADMOB_APP_ID);
         Intent intent = getIntent();
         mCurrentItemInfoUri = intent.getData();
         requestPermissions();
-
+        AdView adView = new AdView(this);
+        adView.setAdSize(AdSize.BANNER);
+        adView.setAdUnitId(ADMOB_AD_UNIT_ID_TEST);
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
         if (savedInstanceState != null) {
             if (savedInstanceState.getString(KEY_ITEM_NAME) != null){
                 mItemNameEditText.setText(savedInstanceState.getString(KEY_ITEM_NAME));
