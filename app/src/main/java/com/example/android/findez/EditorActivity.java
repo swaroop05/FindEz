@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -181,16 +182,8 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
 
 
         Uri uri = null;
-        int changedRowID = 0;
         if (mCurrentItemInfoUri != null) {
-            changedRowID = getContentResolver().update(mCurrentItemInfoUri, values, null, null);
-            if (changedRowID != 0) {
-                Toast.makeText(this, getString(R.string.editor_insert_item_successful),
-                        Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, getString(R.string.editor_insert_item_failed),
-                        Toast.LENGTH_SHORT).show();
-            }
+            new InsertItemToDbTask().execute(values);
         } else {
             uri = getContentResolver().insert(FindEzContract.FindEzEntry.CONTENT_URI, values);
             if (uri == null) {
@@ -552,4 +545,25 @@ public class EditorActivity extends AppCompatActivity implements LoaderManager.L
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
+
+    public class InsertItemToDbTask extends AsyncTask<ContentValues, Void, Integer>{
+
+        @Override
+        protected Integer doInBackground(ContentValues... contentValues) {
+            return getContentResolver().update(mCurrentItemInfoUri, contentValues[0], null, null);
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+            if (integer != 0) {
+                displayToastMessage(getString(R.string.editor_insert_item_successful));
+
+            } else {
+                displayToastMessage(getString(R.string.editor_insert_item_failed));
+            }
+        }
+    }
+
+
 }
