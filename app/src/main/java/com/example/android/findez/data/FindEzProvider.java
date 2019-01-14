@@ -138,7 +138,7 @@ public class FindEzProvider extends ContentProvider {
             Log.e(LOG_TAG, "Failed to insert row for " + uri);
             return null;
         }
-        //Notify all listeners that the data has changed for this inventory Content URI
+        //Notify all listeners that the data has changed for this Item Content URI
         getContext().getContentResolver().notifyChange(uri, null);
 
         return ContentUris.withAppendedId(uri, id);
@@ -185,7 +185,7 @@ public class FindEzProvider extends ContentProvider {
                 }
                 return idChanged;
             case ITEMS_INFO_ID:
-                // For the INVENTORY_ID code, extract out the ID from the URI,
+                // For the ITEMS_INFO_ID code, extract out the ID from the URI,
                 // so we know which row to update. Selection will be "_id=?" and selection
                 // arguments will be a String array containing the actual ID.
                 selection = FindEzContract.FindEzEntry._ID + "=?";

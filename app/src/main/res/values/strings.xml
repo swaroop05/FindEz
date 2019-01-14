@@ -13,21 +13,18 @@
     <string name="editor_update_delete_successful">Updates to DB is successful</string>
     <!-- Toast message in editor when new Item has failed to be inserted [CHAR LIMIT=NONE] -->
     <string name="editor_update_delete_failed">Updates to DB is failed</string>
-
     <string name="cd_item_poster_iv">item\'s image</string>
     <string name="permission_denied_message">Since you denied permission, Cannot open gallery to load image. Go to App permission to enable and try again</string>
-    <string name="db_is_empty">Data base is empty. Click + to add</string>
+    <string name="db_is_empty">Click + to add</string>
     <string name="editor_activity_title_edit_item_info">Edit Item</string>
     <string name="editor_activity_title_add_item_info">Add Item</string>
     <!-- Dialog message when user is leaving editor but hasn't saved changes [CHAR LIMIT=NONE] -->
     <string name="unsaved_changes_dialog_msg">Discard your changes and quit editing?</string>
     <!-- Dialog button text for the option to discard a user's changes [CHAR LIMIT=20] -->
     <string name="discard">Discard</string>
-
-    <!-- Dialog button text for the option to keep editing the current inventory [CHAR LIMIT=20] -->
+    <!-- Dialog button text for the option to keep editing the current Item [CHAR LIMIT=20] -->
     <string name="keep_editing">Keep Editing</string>
     <string name="fields_mandatory_msg">Except Comments, rest fields are mandatory. Including image</string>
-
     <!-- Toast message in editor when current item was successfully deleted [CHAR LIMIT=NONE] -->
     <string name="editor_delete_item_successful">Item deleted</string>
     <!-- Toast message in editor when current item has failed to be deleted [CHAR LIMIT=NONE] -->
@@ -43,5 +40,6 @@
     <string name="save_btn_description">Save Item</string>
     <string name="delete_btn_description">Delete Item</string>
     <string name="search_btn_description">Search Item</string>
+    <string name="list_item_tools_text_view" translatable="false">Honda Coupon</string>
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
 </resources>

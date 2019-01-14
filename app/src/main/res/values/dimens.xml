@@ -2,11 +2,19 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="fab_elevation">6dp</dimen>
-
+    <dimen name="fab_width_height">56dp</dimen>
 
     <!-- Height of each Image item -->
     <dimen name="image_item_height">280dp</dimen>
+    <dimen name="list_item_image_height">300dp</dimen>
+    <dimen name="list_item_text_view_padding">16dp</dimen>
     <dimen name="app_bar_elevation">4dp</dimen>
+    <dimen name="app_bar_height">80dp</dimen>
+    <dimen name="tool_bar_margin">8dp</dimen>
+    <dimen name="grid_view_layout_padding_bottom">24dp</dimen>
+    <dimen name="grid_view_col_width">150dp</dimen>
+    <dimen name="grid_view_spacing">0dp</dimen>
+    <dimen name="empty_text_view_size">24sp</dimen>
 
     <!--
 Refer to App Widget Documentation for margin information

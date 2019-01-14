@@ -11,11 +11,10 @@ import android.widget.RemoteViews;
  * Implementation of App Widget functionality.
  */
 public class FindEzWidgetProvider extends AppWidgetProvider {
-public static final String WIDGET_SEARCH = "search_from_widget";
+    public static final String WIDGET_SEARCH = "search_from_widget";
+
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
-
-
         // Construct the RemoteViews object
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.find_ez_widget_provider);
         Intent addItemIntent = new Intent(context, EditorActivity.class);

@@ -10,7 +10,7 @@
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="80dp"
+        android:layout_height="@dimen/app_bar_height"
         android:background="?colorPrimary"
         app:elevation="@dimen/app_bar_elevation">
 
@@ -24,43 +24,41 @@
                 android:id="@+id/app_bar"
                 android:layout_width="match_parent"
                 android:layout_height="?actionBarSize"
-                android:layout_marginStart="8dp"
-                app:theme="@style/CustomActionBarTheme"
+                android:layout_marginStart="@dimen/tool_bar_margin"
                 app:layout_collapseMode="pin"
                 app:layout_scrollFlags="scroll"
-                />
+                app:theme="@style/CustomActionBarTheme" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
-
     </android.support.design.widget.AppBarLayout>
-<LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingBottom="24dp"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
-    <GridView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/gv_items"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:columnWidth="150dp"
-        android:gravity="center"
-        android:horizontalSpacing="0dp"
-        android:numColumns="auto_fit"
-        android:stretchMode="columnWidth"
-        android:verticalSpacing="0dp"
-        tools:context=".MainActivity"
-        />
-</LinearLayout>
+        android:paddingBottom="@dimen/grid_view_layout_padding_bottom"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <GridView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/gv_items"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:columnWidth="@dimen/grid_view_col_width"
+            android:gravity="center"
+            android:horizontalSpacing="@dimen/grid_view_spacing"
+            android:numColumns="auto_fit"
+            android:stretchMode="columnWidth"
+            android:verticalSpacing="@dimen/grid_view_spacing"
+            tools:context=".MainActivity" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/empty_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:padding="8dp"
         android:text="@string/db_is_empty"
-        android:textSize="12sp" />
+        android:textSize="@dimen/empty_text_view_size" />
 
     <ProgressBar
         android:id="@+id/loading_spinner_main"
@@ -71,15 +69,13 @@
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_fab"
+        android:layout_width="@dimen/fab_width_height"
+        android:layout_height="@dimen/fab_width_height"
         android:layout_gravity="bottom|end"
-        android:layout_width="56dp"
-        android:layout_height="56dp"
         android:layout_marginBottom="@dimen/fab_margin"
         android:layout_marginEnd="@dimen/fab_margin"
         android:contentDescription="@string/action_add"
         android:elevation="@dimen/fab_elevation"
         android:src="@drawable/ic_add_white_24dp"
         app:fabSize="normal" />
-
-
 </android.support.design.widget.CoordinatorLayout>

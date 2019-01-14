@@ -19,7 +19,7 @@ public class FindEzDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String SQL_CREATE_ENTRIES = "CREATE TABLE " + FindEzContract.FindEzEntry.TABLE_NAME + " (" + FindEzContract.FindEzEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + FindEzContract.FindEzEntry.COLUMN_ITEM_NAME + " TEXT NOT NULL, " + FindEzContract.FindEzEntry.COLUMN_ITEM_LOCATION + " TEXT NOT NULL, " + FindEzContract.FindEzEntry.COLUMN_ITEM_COMMENTS + " TEXT, " + FindEzContract.FindEzEntry.COLUMN_ITEM_IMAGE + " BLOB"+ ");";
+        String SQL_CREATE_ENTRIES = "CREATE TABLE " + FindEzContract.FindEzEntry.TABLE_NAME + " (" + FindEzContract.FindEzEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " + FindEzContract.FindEzEntry.COLUMN_ITEM_NAME + " TEXT NOT NULL, " + FindEzContract.FindEzEntry.COLUMN_ITEM_LOCATION + " TEXT NOT NULL, " + FindEzContract.FindEzEntry.COLUMN_ITEM_COMMENTS + " TEXT, " + FindEzContract.FindEzEntry.COLUMN_ITEM_IMAGE + " BLOB" + ");";
         sqLiteDatabase.execSQL(SQL_CREATE_ENTRIES);
     }
 

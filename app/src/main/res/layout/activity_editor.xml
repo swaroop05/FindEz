@@ -5,34 +5,35 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.android.findez.EditorActivity">
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <ImageView
-                android:id="@+id/iv_item_image"
+
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/image_item_height"
-                android:src="@drawable/ic_add_image"
-                android:contentDescription="@string/image_view_description"
-                android:nextFocusDown="@id/ev_item_name"/>
-            <ProgressBar
-                android:id="@+id/loading_spinner_editor"
-                style="@style/Widget.AppCompat.ProgressBar"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center" />
-        </FrameLayout>
+                android:layout_height="wrap_content">
 
+                <ImageView
+                    android:id="@+id/iv_item_image"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/image_item_height"
+                    android:contentDescription="@string/image_view_description"
+                    android:nextFocusDown="@id/ev_item_name"
+                    android:src="@drawable/ic_add_image" />
 
+                <ProgressBar
+                    android:id="@+id/loading_spinner_editor"
+                    style="@style/Widget.AppCompat.ProgressBar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
+            </FrameLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -43,34 +44,26 @@
                     android:id="@+id/ev_item_name"
                     style="@style/EditorFieldStyle"
                     android:hint="@string/item_name"
-                    android:nextFocusDown="@id/ev_item_location"/>
+                    android:nextFocusDown="@id/ev_item_location" />
 
                 <EditText
                     android:id="@+id/ev_item_location"
                     style="@style/EditorLocationFieldStyle"
                     android:hint="@string/item_location"
-                    android:nextFocusDown="@id/ev_item_comments"/>
+                    android:nextFocusDown="@id/ev_item_comments" />
 
                 <EditText
                     android:id="@+id/ev_item_comments"
                     style="@style/EditorCommentsFieldStyle"
                     android:hint="@string/item_comments" />
-
             </LinearLayout>
 
-            <com.google.android.gms.ads.AdView
-                xmlns:ads="http://schemas.android.com/apk/res-auto"
+            <com.google.android.gms.ads.AdView xmlns:ads="http://schemas.android.com/apk/res-auto"
                 android:id="@+id/adView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentStart="true"
                 ads:adSize="BANNER"
-                ads:adUnitId="ca-app-pub-3940256099942544/6300978111">
-            </com.google.android.gms.ads.AdView>
+                ads:adUnitId="ca-app-pub-3940256099942544/6300978111" />
         </LinearLayout>
-
     </ScrollView>
-
 </LinearLayout>

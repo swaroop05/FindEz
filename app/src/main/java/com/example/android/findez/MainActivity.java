@@ -25,62 +25,49 @@ import android.widget.ProgressBar;
 import android.widget.SearchView;
 
 import com.example.android.findez.data.FindEzContract;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
-    private FirebaseAnalytics mFirebaseAnalytics;
     ItemsCursorAdapter itemsCursorAdapter;
     String mSearchString = null;
     String widgetSearch = null;
-
     @BindView(R.id.gv_items)
     GridView itemsGridView;
-
     @BindView(R.id.empty_view)
     View emptyView;
-
     @BindView(R.id.add_fab)
     FloatingActionButton fab;
-
     @BindView(R.id.app_bar)
     Toolbar mToolbar;
-
     @BindView(R.id.loading_spinner_main)
     ProgressBar mProgressbarView;
+    private FirebaseAnalytics mFirebaseAnalytics;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         // Obtain the FirebaseAnalytics instance.
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
         setSupportActionBar(mToolbar);
         getSupportActionBar().setTitle(R.string.app_name);
-        //getSupportActionBar().setWindowTitle(getString(R.string.app_name));
         getSupportActionBar().setDisplayShowTitleEnabled(true);
 
         // Setup FAB to open EditorActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loggingFireBaseAnalytics(R.id.add_fab, getString(R.string.action_add),getString(R.string.floating_action_btn));
+                loggingFireBaseAnalytics(R.id.add_fab, getString(R.string.action_add), getString(R.string.floating_action_btn));
                 Intent intent = new Intent(MainActivity.this, EditorActivity.class);
                 startActivity(intent);
 
             }
         });
-
         // Find and set empty view on the ListView, so that it only shows when the list has 0 items.
-
         itemsGridView.setEmptyView(emptyView);
         itemsCursorAdapter = new ItemsCursorAdapter(this, null);
         itemsGridView.setAdapter(itemsCursorAdapter);
@@ -109,7 +96,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         String[] projection = {FindEzContract.FindEzEntry._ID,
                 FindEzContract.FindEzEntry.COLUMN_ITEM_NAME,
                 FindEzContract.FindEzEntry.COLUMN_ITEM_IMAGE};
-        if (mSearchString != null ) {
+        if (mSearchString != null) {
             searchString = "%" + mSearchString + "%";
             selection = FindEzContract.FindEzEntry.COLUMN_ITEM_NAME + " LIKE ?";
             selectionArgs = new String[]{searchString};
@@ -153,14 +140,13 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             public boolean onQueryTextChange(String newText) {
                 if (newText.isEmpty()) {
                     mSearchString = null;
-                }else {
+                } else {
                     mSearchString = newText;
                 }
                 getSupportLoaderManager().restartLoader(0, null, MainActivity.this);
                 return true;
             }
         });
-
         searchView.setOnCloseListener(new SearchView.OnCloseListener() {
             @Override
             public boolean onClose() {
@@ -169,8 +155,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 return false;
             }
         });
-
-        if (widgetSearch != null){
+        if (widgetSearch != null) {
             searchView.setFocusable(true);
             searchView.setIconified(false);
             searchView.requestFocusFromTouch();
@@ -179,20 +164,30 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         return true;
     }
 
+    /**
+     * Handling Itent from Widget Search
+     *
+     * @param intent
+     */
     private void handleIntent(Intent intent) {
-
         if (intent.getStringExtra(FindEzWidgetProvider.WIDGET_SEARCH) != null) {
             widgetSearch = intent.getStringExtra(FindEzWidgetProvider.WIDGET_SEARCH);
         }
     }
 
-    public void loggingFireBaseAnalytics (int id, String name, String type){
+    /**
+     * logging Firebase helper method
+     *
+     * @param id
+     * @param name
+     * @param type
+     */
+    public void loggingFireBaseAnalytics(int id, String name, String type) {
         mFirebaseAnalytics.setAnalyticsCollectionEnabled(true);
         Bundle bundle = new Bundle();
         bundle.putInt(FirebaseAnalytics.Param.ITEM_ID, id);
         bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, name);
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, type);
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
     }
 }
